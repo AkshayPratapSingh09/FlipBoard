@@ -1,36 +1,164 @@
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+# How I Built it
 
-## Getting Started
+- **FabricJs** -  A Canvas Library for easy implementation of canvas Movable Canvas Elements 
+- For reference <a href="https://fabricjs.com/">FabricJs Site</a>
 
-First, run the development server:
+- **UUID** -  A Js Library for generating unique IDs for all elements(Lot fo canvas and User needs unique IDs) 
+- For reference <a href="https://www.npmjs.com/package/uuid">UUID (Unique Ids)</a>
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+- **Liveblocks** -  For Collaborative working(Multiple devs working on same App) ans *sharing* / *commenting* / *Reacting* etc. 
+- For reference <a href="https://liveblocks.io/">Liveblocks (Collaborative Working)</a>
+
+**!** -> In typescript it ignore if the variable exist or not
+- Used in the  public Key While Creating Client For LiveBLock (Collaborative Features) *to ensure use of env varibales*
+
+# Commands For Setup :
+
+```
+npm install fabric uuid
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+```
+npm i @liveblocks/client @liveblocks/react
+```
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+### Initialize the `liveblocks.config.ts` file
 
-This project uses [`next/font`](https://nextjs.org/docs/basic-features/font-optimization) to automatically optimize and load Inter, a custom Google Font.
+```
+npx create-liveblocks-app@latest --init --framework react
+```
 
-## Learn More
+## Setting Up Main Collaborative Frontend 
 
-To learn more about Next.js, take a look at the following resources:
+- Start by using get started and setup up and Wrap up the app within the Room(Collaborative) 
+- <a href="https://liveblocks.io/docs/get-started/nextjs">Getting Started : Setup Nextjs</a>
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+- ## Now our default Page is a Collaborative Page and Will Show how many people have Joined
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
 
-## Deploy on Vercel
+# For The UI Library we are using Shadcn/ui
+- <a href="">Installation Shadcn/ui for NextJs</a>
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+```
+npx shadcn-ui@latest init
+```
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
+## Now copy pre-written tailwind.Config 
+
+<details>
+<summary><code>tailwind.config.ts</code></summary>
+
+```typescript
+import type { Config } from "tailwindcss";
+
+const config = {
+  darkMode: ["class"],
+  content: [
+    "./pages/**/*.{ts,tsx}",
+    "./components/**/*.{ts,tsx}",
+    "./app/**/*.{ts,tsx}",
+    "./src/**/*.{ts,tsx}",
+  ],
+  prefix: "",
+  theme: {
+    container: {
+      center: true,
+      padding: "2rem",
+      screens: {
+        "2xl": "1400px",
+      },
+    },
+    extend: {
+      colors: {
+        primary: {
+          black: "#14181F",
+          green: "#56FFA6",
+          grey: {
+            100: "#2B303B",
+            200: "#202731",
+            300: "#C4D3ED",
+          },
+        },
+      },
+      keyframes: {
+        "accordion-down": {
+          from: { height: "0" },
+          to: { height: "var(--radix-accordion-content-height)" },
+        },
+        "accordion-up": {
+          from: { height: "var(--radix-accordion-content-height)" },
+          to: { height: "0" },
+        },
+      },
+      animation: {
+        "accordion-down": "accordion-down 0.2s ease-out",
+        "accordion-up": "accordion-up 0.2s ease-out",
+      },
+    },
+  },
+  plugins: [require("tailwindcss-animate")],
+} satisfies Config;
+
+export default config;
+```
+
+</details>
+
+<details>
+<summary><code>app/globals.css</code></summary>
+
+```css
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@import "@liveblocks/react-comments/styles.css";
+
+* {
+  font-family:
+    work sans,
+    sans-serif;
+}
+
+@layer utilities {
+  .no-ring {
+    @apply outline-none ring-0 ring-offset-0 focus:ring-0 focus:ring-offset-0 focus-visible:ring-offset-0 !important;
+  }
+
+  .input-ring {
+    @apply h-8 rounded-none border-none  bg-transparent outline-none ring-offset-0 focus:ring-1  focus:ring-primary-green focus:ring-offset-0 focus-visible:ring-offset-0 !important;
+  }
+
+  .right-menu-content {
+    @apply flex w-80 flex-col gap-y-1 border-none bg-primary-black py-4 text-white !important;
+  }
+
+  .right-menu-item {
+    @apply flex justify-between px-3 py-2 hover:bg-primary-grey-200 !important;
+  }
+}
+```
+
+</details>
+
+## Now Install `@liveblocks/react-comments` for implementing react  by commenting for collaborative page
+
+```
+npm install @liveblocks/react-comments
+```
+
+## Now Grab all the assets for this Projects
+- Includes *type Declarations*, *constants values*, *events and Custo Hooks For Canvas*, *Image Assets* and *LiveBlock Config*
+- <a href="https://drive.google.com/file/d/17tRs0sEiIsCeTYEXhWEdHMrTshuz2oYf/view?usp=sharing">Get assets Zip Here</a>
+
+
+## Now we create cursors for every Users there
+
+`Components/Cursor/Cursor.tsx`
+- It container the base component for a cursor for all the collaborating people 
+
+`Components/Cursor/LiveCursors.tsx`
+- This will contain/render all the people's cursor using Cursor.tsx
+
+`Components/Cursor/CursorChat.tsx`
+- This will contains the Chat messages from different users(Cursors)
