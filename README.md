@@ -162,3 +162,7 @@ npm install @liveblocks/react-comments
 
 `Components/Cursor/CursorChat.tsx`
 - This will contains the Chat messages from different users(Cursors)
+
+### Hook Provided by Liveblocks
+- `useOthers` - Will give info regarding others on the same board
+- ``
