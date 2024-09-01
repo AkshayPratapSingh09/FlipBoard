@@ -75,8 +75,8 @@ const Live = () => {
                 },
             });
         }
-            // console.log("Triggering Move")
-            // console.log(`x is ${x} | y is ${y}`)
+            console.log("Triggering Move")
+            console.log(`x is ${x} | y is ${y}`)
       }, []);
 
 // Hide the cursor when the mouse leaves the canvas
